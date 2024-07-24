@@ -1,117 +1,55 @@
-/*
-	Strata by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+// Update: JS code is now switched to pure vanilla for proper page functionality with Recent work section / jQuery is still in use for other functions
 
-(function($) {
+document.addEventListener('DOMContentLoaded', function() {
+    var header = document.getElementById('header');
+    var footer = document.getElementById('footer');
+    var main = document.getElementById('main');
+    var parallaxFactor = 20;
+    var isParallaxEnabled = true;
 
-	var $window = $(window),
-		$body = $('body'),
-		$header = $('#header'),
-		$footer = $('#footer'),
-		$main = $('#main'),
-		settings = {
+    // Function to handle parallax effect
+    function updateParallax() {
+        if (isParallaxEnabled) {
+            var scrollTop = window.scrollY;
+            header.style.backgroundPosition = 'left ' + (-scrollTop / parallaxFactor) + 'px';
+        }
+    }
 
-			// Parallax background effect?
-				parallax: true,
+    // Event listener for scroll
+    window.addEventListener('scroll', updateParallax);
 
-			// Parallax factor (lower = more intense, higher = less intense).
-				parallaxFactor: 20
+    // Initial parallax update
+    updateParallax();
 
-		};
+    // Handle load event
+    window.addEventListener('load', function() {
+        document.body.classList.remove('is-preload');
+    });
 
-	// Breakpoints.
-		breakpoints({
-			xlarge:  [ '1281px',  '1800px' ],
-			large:   [ '981px',   '1280px' ],
-			medium:  [ '737px',   '980px'  ],
-			small:   [ '481px',   '736px'  ],
-			xsmall:  [ null,      '480px'  ],
-		});
+    // Handle breakpoints
+    function handleBreakpoints() {
+        var windowWidth = window.innerWidth;
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+        if (windowWidth <= 737) { // Medium breakpoint or smaller
+            if (footer.parentNode !== main.parentNode) {
+                main.parentNode.insertBefore(footer, main.nextSibling);
+            }
+        } else { // Larger than medium
+            if (footer.parentNode !== header) {
+                header.appendChild(footer);
+            }
+        }
+    }
 
-	// Touch?
-		if (browser.mobile) {
+    // Initial check
+    handleBreakpoints();
 
-			// Turn on touch mode.
-				$body.addClass('is-touch');
+    // Listen for resize events
+    window.addEventListener('resize', handleBreakpoints);
 
-			// Height fix (mostly for iOS).
-				window.setTimeout(function() {
-					$window.scrollTop($window.scrollTop() + 1);
-				}, 0);
-
-		}
-
-	// Footer.
-		breakpoints.on('<=medium', function() {
-			$footer.insertAfter($main);
-		});
-
-		breakpoints.on('>medium', function() {
-			$footer.appendTo($header);
-		});
-
-	// Header.
-
-		// Parallax background.
-
-			// Disable parallax on IE (smooth scrolling is jerky), and on mobile platforms (= better performance).
-				if (browser.name == 'ie'
-				||	browser.mobile)
-					settings.parallax = false;
-
-			if (settings.parallax) {
-
-				breakpoints.on('<=medium', function() {
-
-					$window.off('scroll.strata_parallax');
-					$header.css('background-position', '');
-
-				});
-
-				breakpoints.on('>medium', function() {
-
-					$header.css('background-position', 'left 0px');
-
-					$window.on('scroll.strata_parallax', function() {
-						$header.css('background-position', 'left ' + (-1 * (parseInt($window.scrollTop()) / settings.parallaxFactor)) + 'px');
-					});
-
-				});
-
-				$window.on('load', function() {
-					$window.triggerHandler('scroll');
-				});
-
-			}
-
-	// Main Sections: Two.
-
-		// Lightbox gallery.
-			$window.on('load', function() {
-
-				$('#two').poptrox({
-					caption: function($a) { return $a.next('h3').text(); },
-					overlayColor: '#2c2c2c',
-					overlayOpacity: 0.85,
-					popupCloserText: '',
-					popupLoaderText: '',
-					selector: '.work-item a.image',
-					usePopupCaption: true,
-					usePopupDefaultStyling: false,
-					usePopupEasyClose: false,
-					usePopupNav: true,
-					windowMargin: (breakpoints.active('<=small') ? 0 : 50)
-				});
-
-			});
-
-})(jQuery);
+    // Touch detection
+    var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) {
+        document.body.classList.add('is-touch');
+    }
+});
