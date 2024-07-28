@@ -10,7 +10,6 @@
 
 ## Table Of Contents
 1. [Overview](Overview)
-2. [Understanding the Code](Understanding-the-Code)
 3. [Images](Images)
 4. [Acknowledgements](Acknowledgements)
 
@@ -20,11 +19,8 @@
 languages such as HTML5, CSS3, JavaScript, and with some use of jQuery on Visual Studio Code. This project took some inspiration from the resource page HTML5 UP! using
 a template called "Strata" that seemed suitable, modern, and appealing to user's or most importantly, recruiters when catching their attention getting to know me and showcasing my skills.
 
-## Understanding the Code
-
-
 ## Images
-
+<img src="Landing Page.png" width=800>
 
 ## Acknowledgements
 [HTML5 UP!](https://html5up.net/)
